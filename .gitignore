@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/test-results/
+**/playwright-report/
+.local/
+.env
+*.user
+*.log
+**/tsconfig.tsbuildinfo
+**/__pycache__/
+*.pyc

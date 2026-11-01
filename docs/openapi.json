@@ -1,0 +1,1811 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "StockFlow.Api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/auth/password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/currency": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "USD"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          },
+          "503": {
+            "description": "Provider unavailable; no usable saved rate. Inventory and orders are unaffected."
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/categories/{id}": {
+      "put": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/suppliers": {
+      "get": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/suppliers/{id}": {
+      "put": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/customers": {
+      "get": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/customers/{id}": {
+      "put": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Directory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/inventory/movements": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/inventory/{id}/adjust": {
+      "post": {
+        "tags": [
+          "Inventory"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Inventory.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/orders/{id}/confirm": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/orders/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin,Sales.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeInactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "StockFlow.Api"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. ",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Authentication uses an HttpOnly session cookie. First call /api/auth/login here. Allowed roles: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-StockFlow",
+            "in": "header",
+            "description": "CSRF protection; use 1.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Invalid input; validation ProblemDetails or a plain-language detail."
+          },
+          "401": {
+            "description": "Sign in required or account session ended."
+          },
+          "403": {
+            "description": "Role does not allow this operation."
+          },
+          "409": {
+            "description": "State, stock, duplicate or relationship conflict. Refresh and retry."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CategoryRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderRequest": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemRequest"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PasswordRequest": {
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "supplierId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "reorderLevel": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoleRequest": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StockRequest": {
+        "type": "object",
+        "properties": {
+          "delta": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Currency"
+    },
+    {
+      "name": "Directory"
+    },
+    {
+      "name": "Inventory"
+    },
+    {
+      "name": "Orders"
+    },
+    {
+      "name": "Products"
+    },
+    {
+      "name": "StockFlow.Api"
+    },
+    {
+      "name": "Users"
+    }
+  ]
+}
